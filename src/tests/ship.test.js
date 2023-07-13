@@ -1,13 +1,19 @@
-import { destroyer } from "../components/Ship";
-
-test("Expects a destroyer to be of size 2", () => {
-  expect(destroyer.length()).toBe(2);
-});
+import { destroyer, Ship } from "../components/Ship";
 
 test("Expects a destroyer to have been hit once", () => {
-  expect(destroyer.hit()).toBe(1);
+  destroyer.hit();
+  expect(destroyer.getStrikes()).toBe(1);
 });
 
-test("Expects a destroyer to be sunk", () => {
-  expect(destroyer.sunk(2)).toEqual(true);
+test("Expects a ship to be sunk after x hits", () => {
+  const sizes = ["XS", "S", "M", "L"];
+  const index = Math.floor(Math.random() * 4);
+  const ship = Ship(sizes[index]);
+
+  expect(ship.getSunk()).toEqual(false);
+  for (let i = 0; i < ship.length(); i++) {
+    ship.hit();
+    expect(ship.getStrikes()).toEqual(i + 1);
+  }
+  expect(ship.getSunk()).toEqual(true);
 });

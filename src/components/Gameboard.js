@@ -1,4 +1,4 @@
-import { destroyer } from "./Ship";
+import { Ship } from "./Ship";
 
 const Gameboard = () => {
   let board = [
@@ -13,6 +13,21 @@ const Gameboard = () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
+
+  const destroyer = Ship("XS");
+  const submarine = Ship("S");
+  const battleship = Ship("M");
+  const carrier = Ship("L");
+  const ships = [destroyer, submarine, battleship, carrier];
+
+  const initialize = () => {
+    // initialize board by generating coordinates for each ship, validating those coordinates, then placing ships
+    for (let i = 0; i < ships.length; i++) {
+      generateCoords(ships[i]);
+    }
+
+    return getBoard();
+  };
 
   const generateCoords = (ship) => {
     let x, y;
@@ -49,7 +64,7 @@ const Gameboard = () => {
         let col = coords[i][0];
 
         if (board[row][col] !== 0) {
-          generateCoords(ship);
+          return generateCoords(ship);
         }
       }
     } else {
@@ -59,7 +74,7 @@ const Gameboard = () => {
         let col = coords[0][0];
 
         if (board[row][col] !== 0) {
-          generateCoords(ship);
+          return generateCoords(ship);
         }
       }
     }
@@ -102,20 +117,37 @@ const Gameboard = () => {
 
     const boardValue = newestBoard[row][col];
     if (boardValue === 0) {
+      // coords corresponds to an empty space
       board[row][col] = 1;
       return board;
     } else if (boardValue !== 1) {
       // coords correspond to a ship object
       boardValue.hit();
       // return boardValue.getStrikes();
+    } else {
+      // coords corresponds to a missed shot, so attack is not valid
+      return boardValue;
     }
   };
 
-  return { generateCoords, validateCoords, placeShip, getBoard, receiveAttack };
+  const allSunk = (ships) => {
+    // checks if all of the board's ships have been sunk
+
+    return ships.every((ship) => ship.getSunk() === true);
+    // game over
+    // if this returns true, we will need to freeze the game and report to the players that the game is over and a particular player has won
+  };
+
+  initialize();
+
+  return {
+    generateCoords,
+    validateCoords,
+    placeShip,
+    getBoard,
+    receiveAttack,
+    allSunk,
+  };
 };
 
-const gameboard = Gameboard();
-// const board = gb.board;
-// gb.place(destroyer);
-
-export { gameboard };
+export { Gameboard };

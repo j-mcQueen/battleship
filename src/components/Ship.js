@@ -54,6 +54,4 @@ const Ship = (size) => {
   };
 };
 
-const destroyer = Ship("XS");
-
-export { destroyer, Ship };
+export { Ship };

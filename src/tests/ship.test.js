@@ -1,8 +1,9 @@
-import { destroyer, Ship } from "../components/Ship";
+import { Ship } from "../components/Ship";
 
 test("Expects a destroyer to have been hit once", () => {
-  destroyer.hit();
-  expect(destroyer.getStrikes()).toBe(1);
+  const ship = Ship("XS");
+  ship.hit();
+  expect(ship.getStrikes()).toBe(1);
 });
 
 test("Expects a ship to be sunk after x hits", () => {
